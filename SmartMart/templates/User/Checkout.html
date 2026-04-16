@@ -1,0 +1,177 @@
+{% extends 'User/commons/base.html' %}
+{% load static %}
+
+{% block title %}
+Checkout
+{% endblock %}
+
+{% block content %}
+
+<style>
+  body {
+    background: #f5f7fb;
+  }
+
+  .checkout-wrapper {
+    width: 80%;
+    margin: 80px auto;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+
+  .checkout-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #222;
+  }
+
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 12px;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .cart-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-name {
+    font-weight: 600;
+    color: #222;
+    font-size: 15px;
+  }
+
+  .product-price {
+    font-size: 14px;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  .cart-right {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .total-box {
+    margin-top: 25px;
+    padding: 18px;
+    background: #ecfdf5;
+    border-radius: 14px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #166534;
+    text-align: right;
+  }
+
+  .address-box {
+    margin-top: 25px;
+  }
+
+  textarea {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    padding: 12px;
+    font-size: 14px;
+    resize: none;
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: #4f46e5;
+  }
+
+  .place-order-btn {
+    margin-top: 18px;
+    background: #4f46e5;
+    color: #ffffff;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .place-order-btn:hover {
+    background: #4338ca;
+    transform: translateY(-2px);
+  }
+
+  .empty-cart {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+  }
+</style>
+
+<div class="checkout-wrapper">
+
+  <div class="checkout-title">
+    Checkout
+  </div>
+
+  {% if cart_items %}
+
+    {% for item in cart_items %}
+      <div class="cart-item">
+        <div class="cart-left">
+          <span class="product-name">
+            {{ item.product.product_name }}
+          </span>
+          <span class="product-price">
+            ₹ {{ item.product.price }} × {{ item.quantity }}
+          </span>
+        </div>
+
+        <div class="cart-right">
+          Qty: {{ item.quantity }}
+        </div>
+      </div>
+    {% endfor %}
+
+    <div class="total-box">
+      Total Amount: ₹ {{ total }}
+    </div>
+
+    <form method="post" action="{% url 'user:place_order' %}">
+      {% csrf_token %}
+
+      <div class="address-box">
+        <label><b>Delivery Address</b></label><br><br>
+
+        <textarea
+          name="address"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+
+      <button type="submit" class="place-order-btn">
+        Place Order
+      </button>
+    </form>
+
+  {% else %}
+
+    <div class="empty-cart">
+      Your cart is empty.
+    </div>
+
+  {% endif %}
+
+</div>
+
+{% endblock %}

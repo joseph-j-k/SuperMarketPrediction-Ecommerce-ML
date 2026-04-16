@@ -1,0 +1,139 @@
+{% extends 'admin/partials/header.html' %}
+{% load static %}
+
+{% block title %}Admin | Complaint{% endblock %}
+
+{% block content %}
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+<link rel="stylesheet" href="{% static 'admin/css/category.css' %}" />
+
+<style>
+  .status-badge {
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .status-pending { background:#fff3cd; color:#92400e; }
+  .status-completed { background:#dcfce7; color:#166534; }
+  .status-replied { background:#e0e7ff; color:#2563eb; }
+  .status-closed { background:#e5e7eb; color:#374151; }
+
+  .content-truncate {
+    max-width: 260px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #4b5563;
+  }
+
+  .reply-btn {
+    background: #4f46e5;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .reply-btn:hover {
+    background: #4338ca;
+    color: #fff;
+  }
+
+  .flex-row:hover {
+    background: #f9fafb;
+  }
+</style>
+
+<div class="page-wrapper">
+  <div class="flow-container">
+
+    <div class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Complaint Management
+      </div>
+
+      <div class="card-body">
+        {% if complaints %}
+        <div class="flex-list">
+
+          <!-- HEADER -->
+          <div class="flex-header">
+            <div class="col-sl">SL</div>
+            <div class="col-name">From</div>
+            <div class="col-name">Title</div>
+            <div class="col-name">Message</div>
+            <div class="col-name">Status</div>
+            <div class="col-action">Action</div>
+          </div>
+
+          <!-- ROWS -->
+          {% for c in complaints %}
+          <div class="flex-row">
+
+            <div class="col-sl">{{ forloop.counter }}</div>
+
+            <!-- FROM -->
+            <div class="col-name">
+              {% if c.user %}
+                <span style="color:#2563eb;font-weight:600;">
+                  <i class="fa-solid fa-user"></i>
+                  {{ c.user.user_name }}
+                </span>
+              {% elif c.seller %}
+                <span style="color:#16a34a;font-weight:600;">
+                  <i class="fa-solid fa-store"></i>
+                  {{ c.seller.seller_name }}
+                </span>
+              {% endif %}
+            </div>
+
+            <!-- TITLE -->
+            <div class="col-name">
+              <strong>{{ c.title }}</strong>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="col-name content-truncate">
+              {{ c.content }}
+            </div>
+
+            <!-- STATUS -->
+            <div class="col-name">
+              <span class="status-badge status-{{ c.status|lower }}">
+                {{ c.status }}
+              </span>
+            </div>
+
+            <!-- ACTION -->
+            <div class="col-action">
+              <a href="{% url 'admin_pannel:reply' c.id %}" class="reply-btn">
+                <i class="fa-solid fa-reply"></i> Reply
+              </a>
+            </div>
+
+          </div>
+          {% endfor %}
+
+        </div>
+        {% else %}
+          <p style="text-align:center;color:#6b7280;">
+            No complaints found
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'admin/partials/header.html' %}
+{% load static %}
+{% block title %}Admin | Place{% endblock %}
+{% block content %}
+
+<!-- FONT AWESOME -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
+<!-- CUSTOM CSS -->
+<link rel="stylesheet" href="{% static 'admin/css/place.css' %}">
+
+{% if message %}
+<script>
+  alert("{{ message|escapejs }}");
+  window.location = "{% url 'admin_pannel:place' %}";
+</script>
+{% endif %}
+
+<div class="page-wrapper">
+  <div class="flow-container">
+
+    <!-- ===============================
+         📝 PLACE FORM
+    ================================ -->
+    <div class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-location-dot"></i>
+        Place Management
+      </div>
+
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- FLEX ROW -->
+          <div class="form-row">
+
+            <!-- DISTRICT DROPDOWN -->
+            <div class="form-group">
+              <select name="district_id" class="form-select" required>
+                <option value="" disabled selected></option>
+                {% for d in districts %}
+                  <option value="{{ d.id }}" {% if place.district.id == d.id %}selected{% endif %}>
+                    {{ d.district_name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <label class="form-label">District</label>
+            </div>
+
+            <!-- PLACE INPUT -->
+            <div class="form-group">
+              <input
+                type="text"
+                name="place_name"
+                class="form-input"
+                value="{{ place.place_name }}"
+                placeholder=""
+                required
+              />
+              <label class="form-label">Place Name</label>
+            </div>
+
+          </div>
+
+          <button class="btn-submit">Save Place</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===============================
+         📋 PLACE LIST
+    ================================ -->
+    <div class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-list"></i>
+        Place List
+      </div>
+
+      <div class="card-body">
+
+        {% if places %}
+        <div class="flex-list">
+
+          <!-- HEADER -->
+          <div class="flex-header">
+            <div class="col-sl">SL No</div>
+            <div class="col-district">District</div>
+            <div class="col-place">Place</div>
+            <div class="col-action">Action</div>
+          </div>
+
+          <!-- ROWS -->
+          {% for p in places %}
+          <div class="flex-row">
+            <div class="col-sl">{{ forloop.counter }}</div>
+            <div class="col-district">{{ p.district.district_name }}</div>
+            <div class="col-place">{{ p.place_name }}</div>
+
+            <div class="col-action">
+              <a href="{% url 'admin_pannel:place_edit' p.id %}">
+                <span class="action-icon edit">
+                  <i class="fa-solid fa-pen"></i>
+                </span>
+              </a>
+              <a href="{% url 'admin_pannel:place_delete' p.id %}">
+                <span class="action-icon delete">
+                  <i class="fa-solid fa-trash"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+        {% else %}
+          <p class="empty-text">No places added yet</p>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

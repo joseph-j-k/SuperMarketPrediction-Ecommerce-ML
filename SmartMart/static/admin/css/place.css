@@ -1,0 +1,220 @@
+/* ===============================
+   🌈 PAGE WRAPPER
+================================ */
+.page-wrapper {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.flow-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ===============================
+   🧱 CARD STYLES
+================================ */
+.card {
+  background: #ffffff;
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  padding: 18px 22px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #4338ca;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-body {
+  padding: 28px;
+}
+
+/* ===============================
+   📝 FORM LAYOUT (FLEX)
+================================ */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+  position: relative;
+}
+
+/* INPUT & SELECT */
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 1rem;
+  background: #ffffff;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* ===============================
+   🏷 FLOATING LABEL
+================================ */
+.form-label {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  background: #ffffff;
+  padding: 0 6px;
+  font-size: 0.9rem;
+  color: #6b7280;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+/* FLOAT EFFECT */
+.form-input:focus + .form-label,
+.form-input:not(:placeholder-shown) + .form-label,
+.form-select:focus + .form-label {
+  top: -8px;
+  font-size: 0.75rem;
+  color: #4f46e5;
+}
+
+/* ===============================
+   🔘 SUBMIT BUTTON
+================================ */
+.btn-submit {
+  margin-top: 28px;
+  padding: 14px;
+  width: 100%;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.35);
+}
+
+/* ===============================
+   📋 LIST (FLEX TABLE)
+================================ */
+.flex-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* HEADER & ROW */
+.flex-header,
+.flex-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+}
+
+/* HEADER */
+.flex-header {
+  background: #eef2ff;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+/* ROW */
+.flex-row {
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.flex-row:hover {
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   📊 COLUMN WIDTHS
+================================ */
+.col-sl {
+  width: 70px;
+  text-align: center;
+}
+
+.col-district {
+  flex: 2;
+}
+
+.col-place {
+  flex: 2;
+}
+
+.col-action {
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* ===============================
+   ✏️ ACTION ICONS
+================================ */
+.action-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.action-icon.edit {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.action-icon.delete {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ===============================
+   ⚠️ EMPTY TEXT
+================================ */
+.empty-text {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* ===============================
+   📱 RESPONSIVE
+================================ */
+@media (max-width: 640px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .col-action {
+    justify-content: flex-start;
+  }
+}

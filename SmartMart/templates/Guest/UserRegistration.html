@@ -1,0 +1,142 @@
+{% extends 'commons/base.html' %}
+{% load static %}
+
+{% block title %}
+SmartMart | User
+{% endblock %}
+
+{% block content %}
+
+<!-- INLINE FIX : Horizontal scroll removal -->
+<style>
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .owl-carousel {
+    overflow: hidden;
+  }
+</style>
+
+{% if message %}
+<script>
+  alert("{{ message|escapejs }}");
+  window.location = "{% url 'guest:user_register' %}";
+</script>
+{% endif %}
+
+<div id="page-content" class="page-content">
+  <div class="banner">
+    <div
+      class="jumbotron jumbotron-bg text-center rounded-0"
+    >
+      <div class="container">
+        <h1 class="pt-5" style="color:black !important">User Register</h1>
+        <div class="card card-login mb-5">
+          <div class="card-body">
+            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+              <div class="form-group row mt-3">
+                <div class="col-md-12">
+                  <input class="form-control" type="text" name="full_name" required placeholder="Full Name">
+                </div>
+              </div>
+
+              <div class="form-group row mt-3">
+                <div class="col-md-12">
+                  <input class="form-control" type="email" name="email" required placeholder="Email">
+                </div>
+              </div>
+
+              <div class="form-group row mt-3">
+                <div class="col-md-12">
+                  <input class="form-control" type="tel" name="contact" required placeholder="Phone">
+                </div>
+              </div>
+
+
+              <div class="form-group row mt-3">
+                <div class="col-md-12">
+                  <select class="form-control" name="sel_district" id="sel_district">
+                    <option>District</option>
+                    {% for d in district %}
+                    <option value="{{d.id}}">{{d.district_name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row mt-3">
+                <div class="col-md-12">
+                  <select class="form-control" name="sel_place" id="sel_place">
+                    <option>Place</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row mt-3">
+                <div class="col-md-12">
+                  <textarea class="form-control" name="address" id="" required placeholder="Address"></textarea>
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <input class="form-control" type="file" name="photo" required>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <input class="form-control" type="text" name="password" required placeholder="Password">
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <input class="form-control" type="text" required placeholder="Confirm Password">
+                </div>
+              </div>
+
+              <div class="form-group row text-center mt-4">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary btn-block text-uppercase">
+                    Register
+                  </button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  $("#sel_district").change(function () {
+        var did = $(this).val();
+        var ur = "{% url 'guest:ajax_place' %}";
+        $.ajax({
+            url: ur,
+            data: { did: did },
+            success: function (data) {
+                $("#sel_place").html(data);
+            },
+        });
+    });
+</script>
+
+{% endblock %}

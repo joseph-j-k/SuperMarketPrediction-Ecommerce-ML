@@ -1,0 +1,169 @@
+{% extends 'admin/partials/header.html'  %}
+{% load static %}
+{% block title %}Admin|Dashboard{% endblock %}
+{%  block content %}
+    <!-- ! Main -->
+    <main class="main users chart-page" id="skip-target">
+      <div class="container">
+        <h2 class="main-title">Dashboard</h2>
+        <div class="row stat-cards">
+          <div class="col-md-6 col-xl-3">
+            <article class="stat-cards-item">
+              <div class="stat-cards-icon primary">
+                <i data-feather="bar-chart-2" aria-hidden="true"></i>
+              </div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">{{ total_vendors }}</p>
+                <p class="stat-cards-info__title">Total Vendors</p>
+                <p class="stat-cards-info__progress">
+                  <span class="stat-cards-info__profit success">
+                    <i data-feather="trending-up" aria-hidden="true"></i>Active
+                  </span>
+                  Registered sellers
+                </p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <article class="stat-cards-item">
+              <div class="stat-cards-icon warning">
+                <i data-feather="file" aria-hidden="true"></i>
+              </div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">{{ total_users }}</p>
+                <p class="stat-cards-info__title">Total Users</p>
+                <p class="stat-cards-info__progress">
+                  <span class="stat-cards-info__profit success">
+                    <i data-feather="trending-up" aria-hidden="true"></i>Active
+                  </span>
+                  Registered Users
+                </p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <article class="stat-cards-item">
+              <div class="stat-cards-icon purple">
+                <i data-feather="file" aria-hidden="true"></i>
+              </div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">{{ total_admins }}</p>
+                <p class="stat-cards-info__title">Total Admins</p>
+                <p class="stat-cards-info__progress">
+                  <span class="stat-cards-info__profit success">
+                    <i data-feather="trending-up" aria-hidden="true"></i>Active
+                  </span>
+                  Registered Admins
+                </p>
+              </div>
+            </article>
+          </div>
+          <!-- <div class="col-md-6 col-xl-3">
+            <article class="stat-cards-item">
+              <div class="stat-cards-icon success">
+                <i data-feather="feather" aria-hidden="true"></i>
+              </div>
+              <div class="stat-cards-info">
+                <p class="stat-cards-info__num">1478 286</p>
+                <p class="stat-cards-info__title">Total visits</p>
+                <p class="stat-cards-info__progress">
+                  <span class="stat-cards-info__profit warning">
+                    <i data-feather="trending-up" aria-hidden="true"></i>0.00%
+                  </span>
+                  Last month
+                </p>
+              </div>
+            </article>
+          </div> -->
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <!-- <article class="customers-wrapper">
+              <canvas id="customersChart" aria-label="Customers statistics" role="img"></canvas>
+              <!--              <p class="customers__title">New Customers <span>+958</span></p>
+              <p class="customers__date">28 Daily Avg.</p>
+              <picture><source srcset="./img/svg/customers.svg" type="image/webp"><img src="./img/svg/customers.svg" alt=""></picture> -->
+            <!-- </article>  -->
+            <article class="white-block">
+              <div class="top-cat-title">
+                <h3>Top categories</h3>
+                <p>{{ total_category }} Categories</p>
+              </div>
+              <ul class="top-cat-list">
+                {% for c in categories  %}
+                <li>
+                  <a href="##">
+                    <div class="top-cat-list__title">
+                      {{ c.category_name }}
+                    </div>
+                  </a>
+                </li>
+                {% empty %}
+                <li>No categories found</li>
+                {% endfor %}
+              </ul>
+            </article>
+          </div>
+          <div class="col-lg-9">
+            <!-- <div class="chart">
+              <canvas id="myChart" aria-label="Site statistics" role="img"></canvas>
+            </div> -->
+            <div class="users-table table-wrapper">
+              <table class="posts-table">
+                <thead>
+                  <tr class="users-table-info">
+                    <th>
+                      <label class="users-table__checkbox ms-20">
+                        <input type="checkbox" class="check-all">Photo
+                      </label>
+                    </th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>District</th>
+                    <th>Place</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                  <tr>
+                    <td>
+                      <label class="users-table__checkbox">
+                        <input type="checkbox" class="check">
+                        <div class="categories-table-img">
+                          {% if user.user_photo %}
+                          <img src="{{ user.user_photo.url }}" alt="{{ user.user_name }}">
+                          {% else %}
+                          <img src="{% static 'admin/assets/img/avatar/default-user.png' %}" alt="No Photo">
+                          {% endif %}
+                        </div>
+                      </label>
+                    </td>
+                    <td>
+                      {{ user.user_name }}
+                    </td>
+                    <td>
+                      <div class="pages-table-img">
+                        {{ user.user_email }}
+                      </div>
+                    </td>
+                    <td>{{ user.user_contact }}</td>
+                    <td>{{ user.place.district.district_name|default:"—" }}</td>
+                    <td>
+                    {{ user.place.place_name|default:"—" }}
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                  <td colspan="6" style="text-align:center;">No users found</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </main>
+    {% endblock %}

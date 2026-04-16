@@ -1,0 +1,104 @@
+{% extends 'User/commons/base.html' %}
+{% block title %}Order Details{% endblock %}
+
+{% block content %}
+
+<style>
+  .detail-wrapper {
+    width: 80%;
+    margin: 150px auto;
+  }
+
+  .item-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .item-name {
+    font-weight: 700;
+    color: #222;
+  }
+
+  .item-meta {
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  .item-total {
+    font-weight: 700;
+    color: #16a34a;
+  }
+
+  .order-status {
+    background-color: #e6f9ed;
+    color: #1e7e34;
+    padding: 8px 14px;
+    border-radius: 8px;
+    display: inline-block;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .rate-btn {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #f59e0b;
+    text-decoration: none;
+  }
+
+  .rate-btn:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="detail-wrapper">
+
+  <h2>Order #{{ order.order_number }}</h2>
+
+  <p class="order-status">
+    Status: <b>{{ order.status }}</b>
+  </p>
+
+  <p><b>Total Amount:</b> ₹ {{ order.total_amount }}</p>
+
+  <hr>
+
+  {% for item in items %}
+    <div class="item-card">
+
+      <!-- LEFT -->
+      <div>
+        <div class="item-name">
+          {{ item.product.product_name }}
+        </div>
+
+        <div class="item-meta">
+          Price: ₹ {{ item.price }} × {{ item.quantity }}
+        </div>
+
+        <!-- ⭐ RATE PRODUCT -->
+        <a href="{% url 'user:rating' item.product.id %}" class="rate-btn">
+          ⭐ Rate this product
+        </a>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="item-total">
+        ₹ {{ item.item_total }}
+      </div>
+
+    </div>
+  {% endfor %}
+
+</div>
+
+{% endblock %}

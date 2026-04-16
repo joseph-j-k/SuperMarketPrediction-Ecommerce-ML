@@ -1,0 +1,104 @@
+{% extends 'admin/partials/header.html' %}
+{% load static %}
+
+{% block title %}Admin | Feedback{% endblock %}
+
+{% block content %}
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+<link rel="stylesheet" href="{% static 'admin/css/category.css' %}" />
+
+<style>
+  .content-truncate {
+    max-width: 320px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #4b5563;
+  }
+
+  .type-user { color:#2563eb; font-weight:600; }
+  .type-seller { color:#16a34a; font-weight:600; }
+
+  .flex-row:hover {
+    background:#f9fafb;
+  }
+</style>
+
+<div class="page-wrapper">
+  <div class="flow-container">
+
+    <div class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-comment-dots"></i>
+        Feedback Management
+      </div>
+
+      <div class="card-body">
+        {% if feedbacks %}
+        <div class="flex-list">
+
+          <!-- HEADER -->
+          <div class="flex-header">
+            <div class="col-sl">SL</div>
+            <div class="col-name">From</div>
+            <div class="col-name">Title</div>
+            <div class="col-name">Message</div>
+            <div class="col-name">Date</div>
+          </div>
+
+          <!-- ROWS -->
+          {% for f in feedbacks %}
+          <div class="flex-row">
+
+            <div class="col-sl">{{ forloop.counter }}</div>
+
+            <!-- FROM -->
+            <div class="col-name">
+              {% if f.user %}
+                <span class="type-user">
+                  <i class="fa-solid fa-user"></i>
+                  {{ f.user.user_name }}
+                </span>
+              {% elif f.seller %}
+                <span class="type-seller">
+                  <i class="fa-solid fa-store"></i>
+                  {{ f.seller.seller_name }}
+                </span>
+              {% endif %}
+            </div>
+
+            <!-- TITLE -->
+            <div class="col-name">
+              <strong>{{ f.title }}</strong>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="col-name content-truncate">
+              {{ f.content }}
+            </div>
+
+            <!-- DATE -->
+            <div class="col-name">
+              {{ f.created_at|date:"d M Y" }}
+            </div>
+
+          </div>
+          {% endfor %}
+
+        </div>
+        {% else %}
+          <p style="text-align:center;color:#6b7280;">
+            No feedback received yet
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

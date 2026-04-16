@@ -1,0 +1,129 @@
+{% extends 'admin/partials/header.html' %}
+{% load static %}
+{% block title %}Admin | Place{% endblock %}
+{% block content %}
+
+<!-- FONT AWESOME -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+
+<!-- CUSTOM CSS -->
+<link rel="stylesheet" href="{% static 'admin/css/sub_category.css' %}">
+
+{% if message %}
+<script>
+  alert("{{ message|escapejs }}");
+  window.location = "{% url 'admin_pannel:sub_category' %}";
+</script>
+{% endif %}
+
+<div class="page-wrapper">
+  <div class="flow-container">
+
+    <!-- ===============================
+         📝 Sub_Category FORM
+    ================================ -->
+    <div class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-location-dot"></i>
+        Sub_Category Management
+      </div>
+
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- FLEX ROW -->
+          <div class="form-row">
+
+            <!-- CATEGORY DROPDOWN -->
+            <div class="form-group">
+              <select name="category_id" class="form-select" required>
+                <option value="" disabled selected></option>
+                {% for c in categorys %}
+                  <option value="{{ c.id }}" {% if c.id == subcategory.category.id %}selected{% endif %}>
+                    {{ c.category_name }}
+                  </option>
+                {% endfor %}
+              </select>
+              <label class="form-label">category</label>
+            </div>
+
+            <!-- Sub_Category INPUT -->
+            <div class="form-group">
+              <input
+                type="text"
+                name="sub_category"
+                class="form-input"
+                value="{{ subcategory.subcategory_name }}"
+                placeholder=""
+                required
+              />
+              <label class="form-label">Sub_Category Name</label>
+            </div>
+
+          </div>
+
+          <button class="btn-submit">Save Sub_Category</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===============================
+         📋 Sub_Category LIST
+    ================================ -->
+    <div class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-list"></i>
+        Sub_Category List
+      </div>
+
+      <div class="card-body">
+
+        {% if sub_categorys %}
+        <div class="flex-list">
+
+          <!-- HEADER -->
+          <div class="flex-header">
+            <div class="col-sl">SL No</div>
+            <div class="col-category">Category</div>
+            <div class="col-subcategory">SubCategory</div>
+            <div class="col-action">Action</div>
+          </div>
+
+          <!-- ROWS -->
+         {% for s in sub_categorys %}
+          <div class="flex-row">
+            <div class="col-sl">{{ forloop.counter }}</div>
+            <div class="col-category">{{ s.category.category_name }}</div>
+            <div class="col-subcategory">{{ s.subcategory_name }}</div>
+
+            <div class="col-action">
+              <a href="{% url 'admin_pannel:sub_category_edit' s.id %}">
+                <span class="action-icon edit">
+                  <i class="fa-solid fa-pen"></i>
+                </span>
+              </a>
+              <a href="{% url 'admin_pannel:sub_category_delete' s.id %}">
+                <span class="action-icon delete">
+                  <i class="fa-solid fa-trash"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+        {% else %}
+          <p class="empty-text">No subcategory added yet</p>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

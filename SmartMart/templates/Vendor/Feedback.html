@@ -1,0 +1,104 @@
+{% extends 'Vendor/commons/base.html' %}
+{% load static %}
+
+{% block title %}
+My Orders
+{% endblock %}
+
+{% block content %}
+<!-- Feedback Page -->
+<style>
+  .feedback-box {
+    max-width: 700px;
+    margin: 100px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  }
+
+  .feedback-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .feedback-list {
+    margin-top: 35px;
+  }
+
+  .feedback-card {
+    background: #f9f9f9;
+    border-left: 5px solid #28a745;
+    padding: 15px 18px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+  }
+
+  .feedback-card h6 {
+    margin: 0;
+    font-weight: 700;
+    color: #222;
+  }
+
+  .feedback-card p {
+    margin: 6px 0 0;
+    color: #555;
+  }
+
+  .feedback-date {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+  }
+</style>
+
+{% if message %}
+<script>
+  alert("{{ message|escapejs }}");
+  window.location = "{% url 'vendor:feedback' %}";
+</script>
+{% endif %}
+<div class="feedback-box">
+
+  <div class="feedback-title">Give Your Feedback</div>
+
+  <!-- Feedback Form -->
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label>Feedback Title</label>
+      <input type="text" name="title" class="form-control" required>
+    </div>
+
+    <div class="form-group mt-3">
+      <label>Feedback Content</label>
+      <textarea name="content" rows="4" class="form-control" required></textarea>
+    </div>
+
+    <button class="btn btn-success mt-3 w-100">
+      Submit Feedback
+    </button>
+  </form>
+
+  <!-- Feedback List -->
+  <div class="feedback-list">
+    <h5 class="mt-4 mb-3">Your Previous Feedback</h5>
+
+    {% for f in feedbacks %}
+      <div class="feedback-card">
+        <h6>{{ f.title }}</h6>
+        <p>{{ f.content }}</p>
+        <div class="feedback-date">
+          {{ f.created_at|date:"d M Y, h:i A" }}
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-center text-muted">No feedback submitted yet.</p>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "Vendor/commons/base.html" %}
+
+{% block title %}Sales Forecast{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* ===== Chart Wrapper ===== */
+.chart-wrapper {
+  width: 90%;
+  margin: 90px auto 40px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+}
+
+/* ===== Cards ===== */
+.forecast-grid {
+  width: 90%;
+  margin: 40px auto 100px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.forecast-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.forecast-card h4 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.forecast-card p {
+  font-size: 30px;
+  font-weight: 800;
+  color: #6c63ff;
+}
+</style>
+
+<!-- ================= CHART ================= -->
+<div class="chart-wrapper">
+  <h3 style="text-align:center; margin-bottom:20px;">
+    📈 Forecasted Units (Next Month)
+  </h3>
+  <canvas id="forecastChart"></canvas>
+</div>
+
+<!-- ================= CARDS (YOUR EXISTING UI) ================= -->
+<div class="forecast-grid">
+  {% for item in forecast %}
+  <div class="forecast-card">
+    <h4>{{ item.product_name }}</h4>
+    <p>{{ item.predicted_units }}</p>
+    <small>Units expected next month</small>
+  </div>
+  {% empty %}
+  <p style="text-align:center;">No forecast available</p>
+  {% endfor %}
+</div>
+
+<!-- ================= CHART SCRIPT ================= -->
+<script>
+const forecastData = {{ forecast|safe }};
+
+// Labels = product names
+const labels = forecastData.map(item => item.product_name);
+
+// Values = predicted units
+const values = forecastData.map(item => item.predicted_units);
+
+new Chart(document.getElementById("forecastChart"), {
+  type: "line",
+  data: {
+    labels: labels,
+    datasets: [{
+      label: "Predicted Units",
+      data: values,
+      tension: 0.4,
+      fill: true,
+      borderWidth: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { precision: 0 }
+      }
+    },
+    plugins: {
+      legend: { display: false }
+    }
+  }
+});
+</script>
+
+{% endblock %}

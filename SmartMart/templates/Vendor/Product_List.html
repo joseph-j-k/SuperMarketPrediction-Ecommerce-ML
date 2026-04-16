@@ -1,0 +1,121 @@
+{% extends "Vendor/commons/base.html" %}
+{% load static %}
+
+{% block title %}
+SmartMart | Add Product
+{% endblock %}
+
+{% block content %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+{% if message %}
+<script>
+  alert("{{ message|escapejs }}");
+  window.location = "{% url 'vendor:product' %}";
+</script>
+{% endif %}
+<style>
+  .product-list-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 150px 0 20px;
+    color: #222;
+  }
+
+  .product-list-wrapper {
+    width: 90%;
+    margin: 0 auto 50px;
+  }
+
+  .product-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .product-list-table th {
+    background: #6c63ff;
+    color: white;
+    padding: 12px;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .product-list-table td {
+    background: #fff;
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .product-list-table tr:hover td {
+    background: #f3f3ff;
+  }
+
+  .product-list-img {
+    width: 55px;
+    height: 55px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+  }
+
+.action-icon.delete {
+  background: #fee2e2;
+  color: #dc2626;
+}
+</style>
+
+
+<div class="product-list-wrapper">
+
+  <h2 class="product-list-title">Product List</h2>
+
+  <table class="product-list-table">
+    <tr>
+      <th>SLNO</th>
+      <th>Image</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Stock</th>
+      <th>Category</th>
+      <th>Subcategory</th>
+      <th>Action</th>
+    </tr>
+
+    {% for p in products %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>
+        <img src="{{ p.product_image.url }}" class="product-list-img">
+      </td>
+
+      <td>{{ p.product_name }}</td>
+
+      <td>₹{{ p.price }}</td>
+
+      <td>{{ p.stock }}</td>
+
+      <td>{{ p.sub_category.category.category_name }}</td>
+
+      <td>{{ p.sub_category.subcategory_name }}</td>
+
+      <td>
+        <a href="{% url 'vendor:delete_product' p.id %}" >
+          <span class="action-icon delete">
+            <i class="fa-solid fa-trash"></i>
+          </span>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+</div>
+
+{% endblock %}

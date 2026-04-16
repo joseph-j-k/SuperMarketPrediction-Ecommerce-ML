@@ -1,0 +1,97 @@
+{% extends 'admin/partials/header.html' %}
+{% load static %}
+{% block title %}Admin|District {% endblock %}
+{% block content %}
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
+<link rel="stylesheet" href="{% static 'admin/css/district.css' %}">
+
+
+{% if message %}
+<script>
+  alert("{{ message|escapejs }}");
+  window.location = "{% url 'admin_pannel:district' %}";
+</script>
+{% endif %}
+
+<div class="page-wrapper">
+  <div class="flow-container">
+
+    <!-- 📝 DISTRICT FORM -->
+    <div class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-location-dot"></i>
+        District Management
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <input
+              type="text"
+              name="district"
+              class="form-input"
+              value="{{ district.district_name }}"
+              placeholder=" "
+              required
+            />
+            <label class="form-label">District Name</label>
+          </div>
+          <button class="btn-submit">Save District</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 📋 DISTRICT LIST -->
+    <div class="card">
+      <div class="card-header">
+        <i class="fa-solid fa-list"></i>
+        District List
+      </div>
+      <div class="card-body">
+
+        {% if districts %}
+        <div class="flex-list">
+
+          <div class="flex-header">
+            <div class="col-sl">SL</div>
+            <div class="col-name">District</div>
+            <div class="col-action">Action</div>
+          </div>
+
+          {% for d in districts %}
+          <div class="flex-row">
+            <div class="col-sl">{{ forloop.counter }}</div>
+            <div class="col-name">{{ d.district_name }}</div>
+            <div class="col-action">
+              <a href="{% url 'admin_pannel:district_edit' d.id %}">
+                <span class="action-icon edit">
+                  <i class="fa-solid fa-pen"></i>
+                </span>
+              </a>
+              <a href="{% url 'admin_pannel:district_delete' d.id %}">
+                <span class="action-icon delete">
+                  <i class="fa-solid fa-trash"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+        {% else %}
+          <p style="text-align:center;color:#6b7280;">
+            No districts added yet
+          </p>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

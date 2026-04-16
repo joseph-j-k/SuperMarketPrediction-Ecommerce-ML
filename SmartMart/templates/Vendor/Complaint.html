@@ -1,0 +1,141 @@
+{% extends 'Vendor/commons/base.html' %}
+{% load static %}
+
+{% block title %}
+My Complaints
+{% endblock %}
+
+{% block content %}
+<style>
+  .complaint-box {
+    max-width: 720px;
+    margin: 90px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .complaint-card {
+    background: #f9f9f9;
+    border-left: 5px solid #dc3545;
+    padding: 15px 18px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+  }
+
+  .complaint-card h6 {
+    margin: 0;
+    font-weight: 700;
+    color: #222;
+  }
+
+  .complaint-card p {
+    margin: 6px 0 0;
+    color: #555;
+  }
+
+  .complaint-meta {
+    font-size: 12px;
+    color: #777;
+    margin-top: 6px;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  .status-pending {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  .status-replied {
+    background: #e6f9ed;
+    color: #1e7e34;
+  }
+
+  .reply-box {
+    background: #eef4ff;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+</style>
+
+<div class="complaint-box">
+
+  <!-- Page Title -->
+  <div class="page-title">Submit a Complaint</div>
+
+ {% if message %}
+<script>
+  alert("{{ message|escapejs }}");
+  window.location = "{% url 'vendor:complaint' %}";
+</script>
+{% endif %}
+
+  <!-- Complaint Form (Like Feedback) -->
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label>Complaint Title</label>
+      <input type="text" name="title" class="form-control" required>
+    </div>
+
+    <div class="form-group mt-3">
+      <label>Complaint Content</label>
+      <textarea name="content" rows="4" class="form-control" required></textarea>
+    </div>
+
+    <button class="btn btn-danger mt-3 w-100">
+      Submit Complaint
+    </button>
+  </form>
+
+  <!-- Complaint List -->
+  <h5 class="mt-4 mb-3">Your Complaints</h5>
+
+  {% for c in complaints %}
+    <div class="complaint-card">
+      <h6>{{ c.title }}</h6>
+      <p>{{ c.content }}</p>
+
+      <div class="complaint-meta">
+        {{ c.created_at|date:"d M Y, h:i A" }}
+      </div>
+
+      <span class="status-badge 
+        {% if c.status == 'Pending' %}status-pending{% else %}status-replied{% endif %}">
+        {{ c.status }}
+      </span>
+
+      {% if c.reply %}
+        <div class="reply-box mt-2">
+          <b>Admin Reply:</b>
+          <p class="mb-1">{{ c.reply }}</p>
+          <div class="complaint-meta">
+            {{ c.replied_at|date:"d M Y, h:i A" }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% empty %}
+    <p class="text-muted text-center">No complaints submitted yet.</p>
+  {% endfor %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends 'User/commons/base.html' %}
+{% load static %}
+
+{% block title %}
+SmartMart | User Home 
+{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background: #f5f7fb;
+  }
+
+  .search-container {
+    width: 92%;
+    margin: 80px auto;
+  }
+
+  .search-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 35px;
+    color: #222;
+    letter-spacing: 0.5px;
+  }
+
+  .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    justify-content: flex-start;
+  }
+
+  .product-card {
+    width: calc(25% - 17px);
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 45px rgba(108,99,255,0.25);
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+
+  .product-name {
+    margin: 14px 0 6px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .product-price {
+    display: inline-block;
+    background: #eef0ff;
+    color: #6c63ff;
+    font-size: 15px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .product-seller {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2563eb;
+    background: #eff6ff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .product-stock {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+  }
+
+  .product-tags {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 8px 0 14px;
+    flex-wrap: wrap;
+  }
+
+  .product-tag {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: #f0f0f0;
+    color: #555;
+    font-weight: 600;
+  }
+
+  .product-btn {
+    display: block;
+    background: linear-gradient(135deg, #6c63ff, #4b47d6);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .product-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(108,99,255,0.4);
+  }
+
+  @media (max-width: 992px) {
+    .product-card {
+      width: calc(33.33% - 15px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-card {
+      width: calc(50% - 15px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-card {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="search-container">
+
+  <h2 class="search-title">Discover Products</h2>
+
+  <div class="product-grid">
+
+    {% for p in products %}
+    <div class="product-card">
+
+      {% if p.product_image %}
+        <img src="{{ p.product_image.url }}" alt="{{ p.product_name }}">
+      {% else %}
+        <img src="{% static 'assets/img/no-image.png' %}">
+      {% endif %}
+
+      <div class="product-name">{{ p.product_name }}</div>
+
+      <div class="product-price">₹{{ p.price }}</div>
+
+      <div class="product-seller">
+        Seller: {{ p.seller.seller_name }}
+      </div>
+
+      <div class="product-stock">Stock: {{ p.stock }}</div>
+
+      <div class="product-tags">
+        <span class="product-tag">{{ p.sub_category.category.category_name }}</span>
+        <span class="product-tag">{{ p.sub_category.subcategory_name }}</span>
+      </div>
+
+      <a href="{% url 'user:add_to_cart' p.id %}" class="product-btn">Add to Cart</a>
+
+    </div>
+    {% empty %}
+      <p style="text-align:center; width:100%; color:#777;">
+        No products found
+      </p>
+    {% endfor %}
+
+  </div>
+
+</div>
+
+{% endblock %}

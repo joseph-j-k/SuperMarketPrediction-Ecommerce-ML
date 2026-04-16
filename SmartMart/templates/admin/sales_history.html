@@ -1,0 +1,199 @@
+{% extends 'admin/partials/header.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.analytics-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px 32px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+
+.analytics-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.analytics-subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 22px;
+}
+
+.chart-container {
+  position: relative;
+  max-width: 460px;
+  margin: auto;
+}
+
+.center-total {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.center-total h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+}
+
+.center-total span {
+  font-size: 13px;
+  color: #666;
+}
+
+/* TABLE */
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.analytics-table th,
+.analytics-table td {
+  padding: 14px 18px;
+  font-size: 15px;
+}
+
+.analytics-table th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #444;
+}
+
+.analytics-table tr {
+  border-bottom: 1px solid #eee;
+}
+
+.analytics-table tr:last-child {
+  border-bottom: none;
+}
+
+/* ALIGNMENTS */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+  font-weight: 600;
+}
+</style>
+
+<h2 class="main-title">Total Sales Distribution</h2>
+
+<!-- DONUT CHART -->
+<div class="analytics-card">
+  <div class="analytics-title">Monthly Sales Contribution</div>
+  <div class="analytics-subtitle">All vendors • All products</div>
+
+  {% if has_data %}
+  <div class="chart-container">
+    <canvas id="salesDonutChart"></canvas>
+
+    <div class="center-total">
+      <h3 id="totalSalesText">₹ 0</h3>
+      <span>Total Sales</span>
+    </div>
+  </div>
+  {% else %}
+    <p style="text-align:center;color:#777;">No sales data available</p>
+  {% endif %}
+</div>
+
+<!-- SALES SUMMARY TABLE -->
+<div class="analytics-card">
+  <div class="analytics-title">Sales Summary</div>
+
+  <table class="analytics-table">
+    <thead>
+      <tr>
+        <th class="text-left">Month</th>
+        <th class="text-center">Total Units</th>
+        <th class="text-right">Total Sales (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in history %}
+      <tr>
+        <td class="text-left">{{ row.month|date:"M Y" }}</td>
+        <td class="text-center">{{ row.total_units }}</td>
+        <td class="text-right">₹ {{ row.total_sales|floatformat:2 }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" style="text-align:center;">No data available</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% if has_data %}
+<script>
+const labels = {{ months|safe }};
+const values = {{ sales|safe }};
+
+// Total in center
+const totalSales = values.reduce((a, b) => a + b, 0);
+document.getElementById("totalSalesText").innerText =
+  "₹ " + totalSales.toLocaleString();
+
+const colors = [
+  '#6366f1', '#22c55e', '#f97316', '#ec4899',
+  '#14b8a6', '#eab308', '#8b5cf6', '#ef4444',
+  '#0ea5e9', '#84cc16', '#f59e0b', '#10b981'
+];
+
+new Chart(document.getElementById('salesDonutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: labels,
+    datasets: [{
+      data: values,
+      backgroundColor: colors.slice(0, values.length),
+      borderWidth: 2,
+      hoverOffset: 10
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '68%',
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          boxWidth: 12,
+          padding: 16
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.label + ': ₹ ' + ctx.parsed.toLocaleString();
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+{% endif %}
+
+{% endblock %}

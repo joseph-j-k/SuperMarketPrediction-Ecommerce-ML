@@ -1,0 +1,127 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}SmartMart | Retail Store{% endblock %}</title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="{% static 'main/assets/fonts/sb-bistro/sb-bistro.css' %}" rel="stylesheet">
+    <link href="{% static 'main/assets/fonts/font-awesome/font-awesome.css' %}" rel="stylesheet">
+
+    <!-- CSS Packages -->
+    <link href="{% static 'main/assets/packages/bootstrap/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'main/assets/packages/o2system-ui/o2system-ui.css' %}" rel="stylesheet">
+    <link href="{% static 'main/assets/packages/owl-carousel/owl-carousel.css' %}" rel="stylesheet">
+    <link href="{% static 'main/assets/packages/cloudzoom/cloudzoom.css' %}" rel="stylesheet">
+    <link href="{% static 'main/assets/packages/thumbelina/thumbelina.css' %}" rel="stylesheet">
+    <link href="{% static 'main/assets/packages/bootstrap-touchspin/bootstrap-touchspin.css' %}" rel="stylesheet">
+
+    <!-- Theme -->
+    <link href="{% static 'main/assets/css/theme.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- ================= Navbar ================= -->
+    <div class="page-header">
+      <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-transparent" id="page-navigation">
+        <div class="container">
+
+          <a href="{% url 'guest:index' %}" class="navbar-brand">
+            <img src="{% static 'main/assets/img/logo/new_logo.png' %}" alt="SmartMart Logo"
+                 style="height: 90px; width: auto;">
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse"
+                  data-target="#navbarcollapse">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarcollapse">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a href="{% url 'guest:index' %}" class="nav-link" style="color:black !important; font-size: 20px !important;">Home</a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'guest:login' %}" class="nav-link" style="color:black !important; font-size: 20px !important;">Login</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" style="color:black !important; font-size: 20px !important;">
+                  Guest
+                </a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'guest:user_register' %}" style="font-size: 15px !important;">User Registration</a>
+                  <a class="dropdown-item" href="{% url 'guest:seller_registration' %}" style="font-size: 15px !important;">Seller Registration</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </nav>
+    </div>
+
+    <!-- ================= Page Content ================= -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- ================= Footer ================= -->
+    <!-- <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <h5>About</h5>
+            <p>
+              Nisi esse dolor irure dolor eiusmod ex deserunt proident cillum.
+            </p>
+          </div>
+
+          <div class="col-md-3">
+            <h5>Links</h5>
+            <ul>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">FAQ</a></li>
+            </ul>
+          </div>
+
+          <div class="col-md-3">
+            <h5>Contact</h5>
+            <ul>
+              <li><i class="fa fa-phone"></i> 08272367238</li>
+              <li><i class="fa fa-envelope"></i> hello@domain.com</li>
+            </ul>
+          </div>
+
+          <div class="col-md-3">
+            <h5>Get Our App</h5>
+            <img src="{% static 'assets/img/playstore.png' %}">
+          </div>
+        </div>
+      </div>
+
+      <p class="copyright text-center">
+        &copy; 2018 Freshcery | All rights reserved.
+      </p>
+    </footer> -->
+
+    <!-- ================= JS ================= -->
+    <script src="{% static 'main/assets/js/jquery.js' %}"></script>
+    <script src="{% static 'main/assets/js/jquery-migrate.js' %}"></script>
+    <script src="{% static 'main/assets/packages/bootstrap/libraries/popper.js' %}"></script>
+    <script src="{% static 'main/assets/packages/bootstrap/bootstrap.js' %}"></script>
+    <script src="{% static 'main/assets/packages/o2system-ui/o2system-ui.js' %}"></script>
+    <script src="{% static 'main/assets/packages/owl-carousel/owl-carousel.js' %}"></script>
+    <script src="{% static 'main/assets/packages/cloudzoom/cloudzoom.js' %}"></script>
+    <script src="{% static 'main/assets/packages/thumbelina/thumbelina.js' %}"></script>
+    <script src="{% static 'main/assets/packages/bootstrap-touchspin/bootstrap-touchspin.js' %}"></script>
+    <script src="{% static 'main/assets/js/theme.js' %}"></script>
+
+  </body>
+</html>

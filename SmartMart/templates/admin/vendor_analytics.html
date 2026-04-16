@@ -1,0 +1,133 @@
+{% extends 'admin/partials/header.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.analytics-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 25px 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  margin-top: 25px;
+}
+
+.analytics-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 5px;
+}
+
+.analytics-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  position: relative;
+  height: 420px;
+}
+</style>
+
+<div class="analytics-card">
+  <div class="analytics-title">Vendor-wise Product Sales</div>
+  <div class="analytics-subtitle">
+    Total sales value & units sold (All vendors)
+  </div>
+
+  <div class="chart-container">
+    <canvas id="vendorChart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const vendors = {{ vendors|safe }};
+const sales = {{ sales|safe }};
+const units = {{ units|safe }};
+
+const ctx = document.getElementById('vendorChart').getContext('2d');
+
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: vendors,
+    datasets: [
+      {
+        label: 'Total Sales Amount (₹)',
+        data: sales,
+        backgroundColor: 'rgba(99, 102, 241, 0.85)',
+        borderRadius: 10,
+        barThickness: 32
+      },
+      {
+        label: 'Units Sold',
+        data: units,
+        backgroundColor: 'rgba(34, 197, 94, 0.85)',
+        borderRadius: 10,
+        barThickness: 32
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          font: {
+            size: 13,
+            weight: '600'
+          }
+        }
+      },
+      title: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: '#111',
+        titleFont: { size: 13 },
+        bodyFont: { size: 13 },
+        padding: 12,
+        callbacks: {
+          label: function(context) {
+            if (context.dataset.label.includes('Sales')) {
+              return ' ₹ ' + context.parsed.y.toLocaleString();
+            }
+            return ' Units: ' + context.parsed.y;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: {
+          font: { size: 12 }
+        }
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: '#eee'
+        },
+        ticks: {
+          callback: function(value) {
+            return value.toLocaleString();
+          }
+        }
+      }
+    }
+  }
+});
+</script>
+
+{% endblock %}

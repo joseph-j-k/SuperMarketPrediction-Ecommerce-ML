@@ -279,9 +279,7 @@ def vendor_sales_history(request):
     total_stock = int(df['stock'].sum())
     total_revenue = float(df['revenue'].sum())
 
-    sell_through = round(
-        (total_sold_units / total_stock) * 100, 2
-    ) if total_stock > 0 else 0
+    sell_through = round((total_sold_units / total_stock) * 100, 2) if total_stock > 0 else 0
 
     figures = {
         'total_sold_units': total_sold_units,

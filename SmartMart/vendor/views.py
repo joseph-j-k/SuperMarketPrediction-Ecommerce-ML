@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-import pandas as pd
+
 
 from Guest.models import Seller
 from .models import Product
@@ -7,7 +7,6 @@ from administrator.models import Category, SubCategory
 from User.models import Order, OrderItem, Complaint, Feedback
 from .ml_utils import baseline_forecast
 from .utils import load_historical_sales_from_db, prepare_historical_summary
-from .ml.forecast import forecast_seller_products
 from .analytics.data_loader import load_seller_product_sales
 from .analytics.summary import monthly_product_sales
 
@@ -272,6 +271,8 @@ def vendor_sales_history(request):
     
     
 def vendor_sales_forecast(request):
+    import pandas as pd   # ✅ move here
+    from .ml.forecast import forecast_seller_products  # ✅ move here
     seller_id = request.session.get("sid")
 
     df = load_seller_product_sales(seller_id)
@@ -301,6 +302,7 @@ def vendor_sales_forecast(request):
 
 
 def monthly_product_sales(df):
+    import pandas as pd   # ✅ add this
     df = df.copy()
 
     # datetime
